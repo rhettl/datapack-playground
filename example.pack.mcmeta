@@ -1,0 +1,35 @@
+{
+  "pack": {
+    "description": "String or Text Component",
+    "pack_format": "Int (deprecated in newer versions)",
+    "min_format": "Int or [Int, Int]",
+    "max_format": "Int or [Int, Int]",
+    "supported_formats": "Int, [Int, Int], or {min_inclusive: Int, max_inclusive: Int}"
+  },
+  "overlays": {
+    "entries": [
+      {
+        "formats": "Int, [Int, Int], or {min_inclusive: Int, max_inclusive: Int}",
+        "directory": "String (a-z, 0-9, _, -)"
+      }
+    ]
+  },
+  "filter": {
+    "block": [
+      {
+        "namespace": "String",
+        "path": "String (regex pattern)"
+      }
+    ]
+  },
+  "features": {
+    "enabled": ["String (feature flags)"]
+  },
+  "language": {
+    "language_code": {
+      "name": "String",
+      "region": "String",
+      "bidirectional": "Bool"
+    }
+  }
+}

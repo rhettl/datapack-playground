@@ -1,0 +1,13 @@
+# Compiled datapacks
+*.zip
+
+# IDE files
+.idea/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+build/
+claude-docs/
+node_modules/

@@ -1,0 +1,11 @@
+{
+  "name": "datapack-workshop",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "zip": "node zip-datapacks.js"
+  },
+  "dependencies": {
+    "archiver": "^7.0.1"
+  }
+}
