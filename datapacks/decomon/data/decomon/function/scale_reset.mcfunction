@@ -18,5 +18,9 @@ execute as @e[type=cobblemon:pokemon,tag=decomon] if score @s decomon_id = #temp
 execute as @e[type=cobblemon:pokemon,tag=decomon] if score @s decomon_id = #temp decomon_selected run data modify entity @s Pokemon.ScaleModifier set from storage decomon:temp new_scale
 execute as @e[type=cobblemon:pokemon,tag=decomon] if score @s decomon_id = #temp decomon_selected store result entity @s decomon_scale_int int 1 run scoreboard players get @s decomon_scale
 
-# Feedback
-tellraw @a [{"text":"✓ ","color":"green"},{"text":"Scale reset to default (100%)","color":"gray"}]
+# Feedback (only if debug is enabled)
+execute if score #debug decomon_test matches 1
+    run tellraw @a [
+      {"text":"✓ ","color":"green"},
+      {"text":"Scale reset to default (100%)","color":"gray"}
+    ]

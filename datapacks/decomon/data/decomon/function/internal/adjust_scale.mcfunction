@@ -35,56 +35,34 @@ execute as @e[type=cobblemon:pokemon,tag=decomon]
     unless score @s decomon_scale matches 1..
     run scoreboard players set @s decomon_scale 100
 
-# Apply the delta adjustment using operation (handles negative values properly)
+# Calculate new scale by adding delta
 $scoreboard players set #delta decomon_scale $(delta)
 execute as @e[type=cobblemon:pokemon,tag=decomon]
     if score @s decomon_id = #temp decomon_selected
-    run
-      scoreboard players
-      operation @s decomon_scale += #delta decomon_scale
+    run scoreboard players operation @s decomon_scale += #delta decomon_scale
 
-# Clamp to min/max (0% to 500%)
+# Store the new value in storage for macro call
 execute as @e[type=cobblemon:pokemon,tag=decomon]
     if score @s decomon_id = #temp decomon_selected
-    run
-      scoreboard players
-      operation @s decomon_scale > decomon_test max_scale
-execute as @e[type=cobblemon:pokemon,tag=decomon]
-    if score @s decomon_id = #temp decomon_selected
-    run
-      scoreboard players
-      operation @s decomon_scale < decomon_test min_scale
-
-# Convert scale to double for NBT storage
-execute as @e[type=cobblemon:pokemon,tag=decomon]
-    if score @s decomon_id = #temp decomon_selected
-    store result storage decomon:temp new_scale double 0.01
+    store result storage decomon:temp scalePercent int 1
     run scoreboard players get @s decomon_scale
 
-# Apply to entity NBT (both display and backup integer)
+# Apply the new scale using the internal apply function (handles clamping and NBT)
 execute as @e[type=cobblemon:pokemon,tag=decomon]
     if score @s decomon_id = #temp decomon_selected
-    run data modify entity @s ScaleModifier
-    set from storage decomon:temp new_scale
-execute as @e[type=cobblemon:pokemon,tag=decomon]
-    if score @s decomon_id = #temp decomon_selected
-    run data modify entity @s Pokemon.ScaleModifier
-    set from storage decomon:temp new_scale
-execute as @e[type=cobblemon:pokemon,tag=decomon]
-    if score @s decomon_id = #temp decomon_selected
-    store result entity @s decomon_scale_int int 1
-    run scoreboard players get @s decomon_scale
+    run function decomon:internal/apply/scale with storage decomon:temp
 
-# Copy score to display variable for tellraw
-execute as @e[type=cobblemon:pokemon,tag=decomon]
+# Feedback (only if debug is enabled)
+execute if score #debug decomon_test matches 1
+    as @e[type=cobblemon:pokemon,tag=decomon]
     if score @s decomon_id = #temp decomon_selected
     store result score #display decomon_scale
     run scoreboard players get @s decomon_scale
 
-# Feedback
-tellraw @a [
-    {"text":"✓ ","color":"green"},
-    {"text":"Scale set to ","color":"gray"},
-    {"score":{"name":"#display","objective":"decomon_scale"},"color":"aqua"},
-    {"text":"%","color":"aqua"}
-  ]
+execute if score #debug decomon_test matches 1
+    run tellraw @a [
+      {"text":"✓ ","color":"green"},
+      {"text":"Scale set to ","color":"gray"},
+      {"score":{"name":"#display","objective":"decomon_scale"},"color":"aqua"},
+      {"text":"%","color":"aqua"}
+    ]
